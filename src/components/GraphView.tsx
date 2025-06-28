@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { ZoomIn, ZoomOut, Center, Maximize2 } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, Maximize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface Node {
@@ -310,7 +310,7 @@ export const GraphView = () => {
             setPan({ x: 0, y: 0 });
           }}
         >
-          <Center className="w-4 h-4" />
+          <RotateCcw className="w-4 h-4" />
         </Button>
         <Button
           size="sm"
