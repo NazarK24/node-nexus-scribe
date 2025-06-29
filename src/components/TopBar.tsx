@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button';
 interface TopBarProps {
   currentView: 'graph' | 'editor';
   onViewChange: (view: 'graph' | 'editor') => void;
+  onSettingsClick: () => void;
+  documentCreator: React.ReactElement;
 }
 
-export const TopBar = ({ currentView, onViewChange }: TopBarProps) => {
+export const TopBar = ({ currentView, onViewChange, onSettingsClick, documentCreator }: TopBarProps) => {
   return (
     <header className="h-16 bg-white/60 backdrop-blur-md border-b border-white/20 px-6 flex items-center justify-between">
       <div className="flex items-center gap-4">
@@ -47,6 +49,8 @@ export const TopBar = ({ currentView, onViewChange }: TopBarProps) => {
       </div>
 
       <div className="flex items-center gap-3">
+        {documentCreator}
+        
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <input
@@ -59,7 +63,12 @@ export const TopBar = ({ currentView, onViewChange }: TopBarProps) => {
           />
         </div>
         
-        <Button variant="ghost" size="sm" className="rounded-xl hover:shadow-neumorphic">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="rounded-xl hover:shadow-neumorphic"
+          onClick={onSettingsClick}
+        >
           <Settings className="w-4 h-4" />
         </Button>
         
