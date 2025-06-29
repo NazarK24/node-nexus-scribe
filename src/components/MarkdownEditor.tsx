@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Bold, Italic, Link, Code, List, ListOrdered, Quote, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface MarkdownEditorProps {
   selectedFile: string | null;
@@ -43,9 +44,19 @@ plt.show()
 Start exploring your knowledge graph!
 `);
   const [isPreview, setIsPreview] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize textarea based on content
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea && !isPreview) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${Math.max(textarea.scrollHeight, 200)}px`;
+    }
+  }, [content, isPreview]);
 
   const formatMarkdown = (wrapper: string, text: string = '') => {
-    const textarea = document.getElementById('markdown-textarea') as HTMLTextAreaElement;
+    const textarea = textareaRef.current;
     if (!textarea) return;
 
     const start = textarea.selectionStart;
@@ -68,27 +79,30 @@ Start exploring your knowledge graph!
   };
 
   const renderMarkdown = (text: string) => {
-    // Basic markdown rendering (simplified)
+    // Enhanced markdown rendering with proper line breaks and overflow handling
     return text
-      .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mb-4">$1</h1>')
-      .replace(/^## (.*$)/gim, '<h2 class="text-xl font-semibold mb-3">$1</h2>')
-      .replace(/^### (.*$)/gim, '<h3 class="text-lg font-medium mb-2">$1</h3>')
+      .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mb-4 text-gray-900 break-words">$1</h1>')
+      .replace(/^## (.*$)/gim, '<h2 class="text-xl font-semibold mb-3 text-gray-800 break-words">$1</h2>')
+      .replace(/^### (.*$)/gim, '<h3 class="text-lg font-medium mb-2 text-gray-700 break-words">$1</h3>')
       .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold">$1</strong>')
       .replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
-      .replace(/`(.*?)`/g, '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">$1</code>')
-      .replace(/\[\[(.*?)\]\]/g, '<span class="text-blue-600 underline cursor-pointer">$1</span>')
-      .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre class="bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto"><code>$2</code></pre>')
-      .replace(/\n/g, '<br>');
+      .replace(/`(.*?)`/g, '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono break-all">$1</code>')
+      .replace(/\[\[(.*?)\]\]/g, '<span class="text-blue-600 underline cursor-pointer break-words">$1</span>')
+      .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre class="bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto min-w-0"><code class="text-sm whitespace-pre">$2</code></pre>')
+      .replace(/\n\n/g, '</p><p class="mb-4">')
+      .replace(/\n/g, '<br>')
+      .replace(/^/, '<p class="mb-4">')
+      .replace(/$/, '</p>');
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between p-4 border-b border-white/20 bg-white/20 backdrop-blur-sm rounded-t-3xl">
+    <div className="h-full flex flex-col overflow-hidden">
+      <div className="flex items-center justify-between p-4 border-b border-white/20 bg-white/20 backdrop-blur-sm rounded-t-3xl flex-shrink-0">
         <div className="flex items-center gap-2">
-          <h3 className="font-semibold text-gray-800">
+          <h3 className="font-semibold text-gray-800 truncate">
             {selectedFile || 'Welcome.md'}
           </h3>
-          <span className="text-xs text-gray-500 bg-white/40 px-2 py-1 rounded-lg">
+          <span className="text-xs text-gray-500 bg-white/40 px-2 py-1 rounded-lg flex-shrink-0">
             Markdown
           </span>
         </div>
@@ -144,26 +158,34 @@ Start exploring your knowledge graph!
         </div>
       </div>
 
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 overflow-hidden">
         {isPreview ? (
           <div 
-            className="h-full overflow-y-auto prose prose-sm max-w-none"
+            className="h-full overflow-y-auto prose prose-sm max-w-none break-words"
+            style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}
             dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }}
           />
         ) : (
-          <textarea
-            id="markdown-textarea"
+          <Textarea
+            ref={textareaRef}
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full h-full bg-transparent border-none outline-none resize-none 
+            className="w-full min-h-full bg-transparent border-none outline-none resize-none 
                      text-gray-800 text-sm leading-relaxed font-mono
-                     placeholder-gray-400"
+                     placeholder-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0
+                     overflow-y-auto"
             placeholder="Start writing your markdown here..."
+            style={{ 
+              minHeight: '200px',
+              height: 'auto',
+              wordWrap: 'break-word',
+              whiteSpace: 'pre-wrap'
+            }}
           />
         )}
       </div>
 
-      <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-b-3xl border-t border-white/20">
+      <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-b-3xl border-t border-white/20 flex-shrink-0">
         <div className="flex items-center justify-between text-xs text-gray-500">
           <div className="flex items-center gap-4">
             <span>{content.split('\n').length} lines</span>
