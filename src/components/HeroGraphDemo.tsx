@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 
 interface DemoNode {
@@ -85,8 +84,7 @@ export const HeroGraphDemo = () => {
 
       // Node text
       ctx.fillStyle = 'white';
-      ctx.font = '12px Inter, sans-serif';
-      ctx.fontWeight = '600';
+      ctx.font = '600 12px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(node.name, node.x, node.y);
