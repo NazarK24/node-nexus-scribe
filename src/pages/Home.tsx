@@ -1,13 +1,16 @@
 
 import React, { useState } from 'react';
-import { ChevronRight, Check, Star, ArrowRight } from 'lucide-react';
+import { ChevronRight, Check, Star, ArrowRight, Mail, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { HeroGraphDemo } from '@/components/HeroGraphDemo';
 import { PricingCard } from '@/components/PricingCard';
-import { TestimonialCarousel } from '@/components/TestimonialCarousel';
 
 const Home = () => {
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
+  const [isLogin, setIsLogin] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const pricingPlans = [
     {
@@ -59,82 +62,156 @@ const Home = () => {
     }
   ];
 
-  const testimonials = [
-    {
-      name: 'Sarah Chen',
-      role: 'Research Scientist',
-      company: 'Stanford University',
-      content: 'KnowledgeGraph transformed how I organize my research. The visual connections help me discover patterns I never noticed before.',
-      rating: 5
-    },
-    {
-      name: 'Marcus Johnson',
-      role: 'Product Manager',
-      company: 'Tech Startup',
-      content: 'Our team collaboration improved 300% after switching to KnowledgeGraph. The real-time editing is seamless.',
-      rating: 5
-    },
-    {
-      name: 'Dr. Emily Rodriguez',
-      role: 'Data Scientist',
-      company: 'Fortune 500',
-      content: 'The code execution feature is a game-changer. I can prototype and document in the same place.',
-      rating: 5
-    }
-  ];
+  const handleAuth = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Auth attempt:', { email, password, isLogin });
+    // TODO: Implement actual auth logic
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Navigation Header */}
+      <nav className="px-6 py-4 flex justify-between items-center">
+        <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          KnowledgeGraph
+        </div>
+        <Button 
+          variant="outline" 
+          className="px-6 py-2 rounded-2xl border-2 hover:bg-white/50 transition-all duration-200 shadow-neumorphic hover:shadow-neumorphic-large"
+        >
+          Open App
+        </Button>
+      </nav>
+
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 px-6">
+      <section className="relative overflow-hidden py-12 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div className="space-y-8">
               <div className="space-y-4">
                 <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                  Organize knowledge
+                  Organize Knowledge.
                   <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    like never before
+                    Connect Ideas.
                   </span>
                 </h1>
                 <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
-                  Combine the power of graph visualization with collaborative editing and code execution. 
-                  Your ideas, connected and alive.
+                  Obsidian meets Google Docs for teams. Real-time collaborative editing with bi-directional linking and code execution.
                 </p>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4">
+              {/* Value Proposition */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <Check className="w-5 h-5 text-green-500" />
+                  <span className="text-gray-700">Real-time collaborative editing</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Check className="w-5 h-5 text-green-500" />
+                  <span className="text-gray-700">Bi-directional linking with graphs</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Check className="w-5 h-5 text-green-500" />
+                  <span className="text-gray-700">Code execution in documents</span>
+                </div>
+              </div>
+
+              <Button 
+                size="lg" 
+                className="group bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl shadow-neumorphic-large hover:shadow-neumorphic transition-all duration-200 animate-pulse hover:animate-none"
+              >
+                Get Started Free
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
+
+            {/* Registration Window */}
+            <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 shadow-neumorphic-large border border-white/50">
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  {isLogin ? 'Welcome Back' : 'Start Your Free Trial'}
+                </h3>
+                <p className="text-gray-600">
+                  {isLogin ? 'Sign in to your account' : 'No credit card required'}
+                </p>
+              </div>
+
+              <form onSubmit={handleAuth} className="space-y-4">
+                <div>
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all duration-200"
+                    required
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="password"
+                    placeholder="Create a password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all duration-200"
+                    required
+                  />
+                </div>
+                
                 <Button 
-                  size="lg" 
-                  className="group bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl shadow-neumorphic-large hover:shadow-neumorphic transition-all duration-200 animate-pulse hover:animate-none"
+                  type="submit"
+                  className="w-full py-3 rounded-2xl bg-primary hover:bg-primary/90 text-white font-semibold shadow-neumorphic hover:shadow-neumorphic-large transition-all duration-200"
                 >
-                  Get Started Free
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  {isLogin ? 'Sign In' : 'Start Free Trial'}
+                </Button>
+              </form>
+
+              <div className="my-6 flex items-center">
+                <div className="flex-1 border-t border-gray-200"></div>
+                <span className="px-4 text-gray-500 text-sm">or</span>
+                <div className="flex-1 border-t border-gray-200"></div>
+              </div>
+
+              <div className="space-y-3">
+                <Button 
+                  variant="outline"
+                  className="w-full py-3 rounded-2xl border-2 hover:bg-white/50 transition-all duration-200 shadow-neumorphic hover:shadow-neumorphic-large"
+                >
+                  <Mail className="w-5 h-5 mr-2" />
+                  Continue with Google
                 </Button>
                 <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="px-8 py-4 rounded-2xl border-2 hover:bg-white/50 transition-all duration-200 shadow-neumorphic hover:shadow-neumorphic-large"
+                  variant="outline"
+                  className="w-full py-3 rounded-2xl border-2 hover:bg-white/50 transition-all duration-200 shadow-neumorphic hover:shadow-neumorphic-large"
                 >
-                  Watch Demo
+                  <Github className="w-5 h-5 mr-2" />
+                  Continue with GitHub
                 </Button>
               </div>
 
-              <div className="flex items-center gap-6 text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-500" />
-                  <span>No credit card required</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-500" />
-                  <span>Setup in 2 minutes</span>
-                </div>
+              <div className="mt-6 text-center">
+                <button
+                  type="button"
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="text-primary hover:underline text-sm"
+                >
+                  {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                </button>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="relative">
-              <HeroGraphDemo />
-            </div>
+      {/* Interactive Demo Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-6">See it in action</h2>
+          <p className="text-xl text-gray-600 mb-12">
+            Watch how ideas connect and grow in real-time
+          </p>
+          <div className="max-w-4xl mx-auto">
+            <HeroGraphDemo />
           </div>
         </div>
       </section>
@@ -159,20 +236,6 @@ const Home = () => {
               />
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 px-6 bg-white/30 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Loved by researchers and teams</h2>
-            <p className="text-xl text-gray-600">
-              Join thousands of users who've transformed their knowledge management
-            </p>
-          </div>
-
-          <TestimonialCarousel testimonials={testimonials} />
         </div>
       </section>
 
