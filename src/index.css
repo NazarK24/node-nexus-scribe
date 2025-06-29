@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -96,14 +95,14 @@ All colors MUST be HSL.
   /* Neumorphic Design System */
   .shadow-neumorphic {
     box-shadow: 
-      8px 8px 16px rgba(163, 177, 198, 0.4),
-      -8px -8px 16px rgba(255, 255, 255, 0.8);
+      5px 5px 10px rgba(163, 177, 198, 0.4),
+      -5px -5px 10px rgba(255, 255, 255, 0.8);
   }
 
   .shadow-neumorphic-large {
     box-shadow: 
-      12px 12px 24px rgba(163, 177, 198, 0.5),
-      -12px -12px 24px rgba(255, 255, 255, 0.9);
+      8px 8px 16px rgba(163, 177, 198, 0.5),
+      -8px -8px 16px rgba(255, 255, 255, 0.9);
   }
 
   .shadow-neumorphic-inset {
@@ -123,28 +122,30 @@ All colors MUST be HSL.
 @keyframes subtle-glow {
   0%, 100% {
     box-shadow: 
-      12px 12px 24px rgba(163, 177, 198, 0.5),
-      -12px -12px 24px rgba(255, 255, 255, 0.9);
+      8px 8px 16px rgba(163, 177, 198, 0.5),
+      -8px -8px 16px rgba(255, 255, 255, 0.9);
   }
   50% {
     box-shadow: 
-      12px 12px 24px rgba(163, 177, 198, 0.5),
-      -12px -12px 24px rgba(255, 255, 255, 0.9),
-      0 0 20px rgba(59, 130, 246, 0.3);
+      8px 8px 16px rgba(163, 177, 198, 0.5),
+      -8px -8px 16px rgba(255, 255, 255, 0.9),
+      0 0 20px rgba(162, 213, 242, 0.3);
   }
 }
 
-@keyframes glow {
-  0%, 100% {
-    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+@keyframes slide-up-modal {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
   }
-  50% {
-    filter: drop-shadow(0 0 16px rgba(59, 130, 246, 0.8));
+  100% {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
-.animate-glow {
-  animation: glow 2s ease-in-out infinite;
+.animate-slide-up-modal {
+  animation: slide-up-modal 300ms ease-out;
 }
 
 .animate-subtle-pulse {
@@ -214,4 +215,19 @@ All colors MUST be HSL.
 
 .prose blockquote {
   @apply border-l-4 border-blue-400 pl-4 italic text-gray-600 my-4;
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 300ms ease-out;
 }
