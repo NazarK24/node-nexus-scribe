@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
-import { ChevronRight, Check, Star, ArrowRight, Mail, Github, X } from 'lucide-react';
+import { ChevronRight, Check, Star, ArrowRight, Mail, Github, X, Eye, Users, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { HeroGraphDemo } from '@/components/HeroGraphDemo';
 import { PricingCard } from '@/components/PricingCard';
+import { TestimonialCarousel } from '@/components/TestimonialCarousel';
 
 const Home = () => {
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
@@ -64,6 +64,30 @@ const Home = () => {
     }
   ];
 
+  const testimonials = [
+    {
+      name: 'Sarah Chen',
+      role: 'Product Manager',
+      company: 'TechCorp',
+      content: 'KnowledgeGraph transformed how our team collaborates. The visual connections between our documents have revealed insights we never knew existed.',
+      rating: 5
+    },
+    {
+      name: 'Dr. Michael Rodriguez',
+      role: 'Research Director',
+      company: 'Innovation Labs',
+      content: 'The ability to execute code directly in our documentation has streamlined our research process. It\'s like having a notebook and IDE in one place.',
+      rating: 5
+    },
+    {
+      name: 'Emma Wilson',
+      role: 'Engineering Manager',
+      company: 'StartupXYZ',
+      content: 'Real-time collaboration with graph visualization is a game-changer. Our team knowledge is now truly connected and accessible.',
+      rating: 5
+    }
+  ];
+
   const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Auth attempt:', { email, password, isLogin });
@@ -89,6 +113,17 @@ const Home = () => {
         <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           KnowledgeGraph
         </div>
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" className="rounded-xl">
+            <a href="/help">Help</a>
+          </Button>
+          <Button variant="ghost" className="rounded-xl">
+            <a href="/blog">Blog</a>
+          </Button>
+          <Button onClick={handleGetStarted} className="rounded-xl shadow-neumorphic hover:shadow-neumorphic-large">
+            Sign In
+          </Button>
+        </div>
       </nav>
 
       {/* Hero Section */}
@@ -104,39 +139,75 @@ const Home = () => {
                   </span>
                 </h1>
                 <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
-                  Obsidian meets Google Docs for teams. Real-time collaborative editing with bi-directional linking and code execution.
+                  The collaborative knowledge management platform that combines graph visualization with real-time editing and code execution.
                 </p>
               </div>
               
               {/* Value Proposition */}
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-green-500" />
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="w-5 h-5 text-green-600" />
+                  </div>
                   <span className="text-gray-700">Real-time collaborative editing</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-green-500" />
-                  <span className="text-gray-700">Bi-directional linking with graphs</span>
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Eye className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <span className="text-gray-700">Interactive knowledge graphs</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-green-500" />
+                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Zap className="w-5 h-5 text-purple-600" />
+                  </div>
                   <span className="text-gray-700">Code execution in documents</span>
                 </div>
               </div>
 
-              <Button 
-                size="lg" 
-                onClick={handleGetStarted}
-                className="group px-8 py-4 rounded-3xl shadow-neumorphic-large hover:shadow-neumorphic transition-all duration-300 animate-subtle-pulse hover:animate-none"
-                style={{ 
-                  backgroundColor: '#a2d5f2',
-                  borderRadius: '24px',
-                  color: 'white'
-                }}
-              >
-                Get Started Free
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <div className="flex gap-4">
+                <Button 
+                  size="lg" 
+                  onClick={handleGetStarted}
+                  className="group px-8 py-4 rounded-3xl shadow-neumorphic-large hover:shadow-neumorphic transition-all duration-300 animate-subtle-pulse hover:animate-none"
+                  style={{ 
+                    backgroundColor: '#a2d5f2',
+                    borderRadius: '24px',
+                    color: 'white'
+                  }}
+                >
+                  Get Started Free
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="px-8 py-4 rounded-3xl shadow-neumorphic hover:shadow-neumorphic-large transition-all duration-300"
+                >
+                  <Eye className="mr-2 w-5 h-5" />
+                  Watch Demo
+                </Button>
+              </div>
+
+              {/* Social Proof */}
+              <div className="flex items-center gap-6 pt-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex -space-x-2">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-bold">
+                        {String.fromCharCode(65 + i)}
+                      </div>
+                    ))}
+                  </div>
+                  <span className="text-sm text-gray-600">Join 10,000+ users</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                  ))}
+                  <span className="text-sm text-gray-600 ml-1">4.9/5 rating</span>
+                </div>
+              </div>
             </div>
 
             {/* Hero Graph Demo */}
@@ -147,13 +218,60 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Interactive Demo Section */}
+      {/* Features Section */}
       <section className="py-20 px-6">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">See it in action</h2>
-          <p className="text-xl text-gray-600 mb-12">
-            Watch how ideas connect and grow in real-time
-          </p>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Everything you need to manage knowledge</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Powerful features designed to help teams collaborate, organize, and discover insights.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 shadow-neumorphic-large border border-white/50 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-neumorphic">
+                <Eye className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Visual Knowledge Graphs</h3>
+              <p className="text-gray-600">
+                See how your ideas connect with interactive graph visualization that reveals hidden relationships.
+              </p>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 shadow-neumorphic-large border border-white/50 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-neumorphic">
+                <Users className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Real-time Collaboration</h3>
+              <p className="text-gray-600">
+                Work together seamlessly with live editing, comments, and instant synchronization across devices.
+              </p>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 shadow-neumorphic-large border border-white/50 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-neumorphic">
+                <Zap className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Code Execution</h3>
+              <p className="text-gray-600">
+                Run Python, JavaScript, and R code directly in your documents for interactive analysis and prototyping.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 px-6 bg-white/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Loved by teams worldwide</h2>
+            <p className="text-xl text-gray-600">
+              See what our users have to say about KnowledgeGraph
+            </p>
+          </div>
+          <TestimonialCarousel testimonials={testimonials} />
         </div>
       </section>
 
@@ -188,7 +306,7 @@ const Home = () => {
               Ready to revolutionize your workflow?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join the knowledge graph revolution. Start organizing your ideas visually and collaboratively today.
+              Join thousands of teams already using KnowledgeGraph to organize their knowledge and accelerate their work.
             </p>
             <Button 
               size="lg"
@@ -203,15 +321,14 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Registration Modal */}
+      {/* Registration Modal - Centered */}
       {showRegistrationModal && (
         <div 
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
           onClick={(e) => e.target === e.currentTarget && closeModal()}
         >
           <div 
-            className="bg-white/90 backdrop-blur-sm rounded-t-3xl p-8 shadow-neumorphic-large border border-white/50 w-full max-w-md mb-0 animate-slide-up-modal"
-            style={{ borderRadius: '24px 24px 0 0' }}
+            className="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-neumorphic-large border border-white/50 w-full max-w-md mx-4"
           >
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold text-gray-900">
