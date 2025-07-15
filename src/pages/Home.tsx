@@ -1,18 +1,33 @@
 import React, { useState } from 'react';
-import { ChevronRight, Check, Star, ArrowRight, Mail, Github, X, Eye, Users, Zap } from 'lucide-react';
+import { ChevronRight, Check, Star, ArrowRight, Mail, Github, X, Eye, Users, Zap, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { HeroGraphDemo } from '@/components/HeroGraphDemo';
 import { PricingCard } from '@/components/PricingCard';
 import { TestimonialCarousel } from '@/components/TestimonialCarousel';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const { user, signIn, signUp, loading } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
+
+  React.useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
 
   const pricingPlans = [
     {
@@ -88,22 +103,67 @@ const Home = () => {
     }
   ];
 
-  const handleAuth = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Auth attempt:', { email, password, isLogin });
-    // TODO: Implement actual auth logic
-    setShowRegistrationModal(false);
+    if (!email || !password) return;
+    
+    setAuthLoading(true);
+    
+    try {
+      if (isLogin) {
+        const { error } = await signIn(email, password);
+        if (error) throw error;
+        
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully signed in.",
+        });
+      } else {
+        if (!fullName) {
+          toast({
+            title: "Error",
+            description: "Please enter your full name.",
+            variant: "destructive",
+          });
+          return;
+        }
+        
+        const { error } = await signUp(email, password, fullName);
+        if (error) throw error;
+        
+        toast({
+          title: "Account created!",
+          description: "Please check your email to verify your account.",
+        });
+      }
+      
+      setShowRegistrationModal(false);
+      resetForm();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "An error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setAuthLoading(false);
+    }
   };
 
   const handleGetStarted = () => {
     setShowRegistrationModal(true);
   };
 
-  const closeModal = () => {
-    setShowRegistrationModal(false);
+  const resetForm = () => {
     setEmail('');
     setPassword('');
+    setFullName('');
     setShowPassword(false);
+  };
+
+  const closeModal = () => {
+    setShowRegistrationModal(false);
+    resetForm();
   };
 
   return (
@@ -114,12 +174,6 @@ const Home = () => {
           KnowledgeGraph
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="rounded-xl">
-            <a href="/help">Help</a>
-          </Button>
-          <Button variant="ghost" className="rounded-xl">
-            <a href="/blog">Blog</a>
-          </Button>
           <Button onClick={handleGetStarted} className="rounded-xl shadow-neumorphic hover:shadow-neumorphic-large">
             Sign In
           </Button>
@@ -343,6 +397,18 @@ const Home = () => {
             </div>
 
             <form onSubmit={handleAuth} className="space-y-4">
+              {!isLogin && (
+                <div>
+                  <Input
+                    type="text"
+                    placeholder="Full Name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all duration-200"
+                    required
+                  />
+                </div>
+              )}
               <div>
                 <Input
                   type="email"
@@ -368,12 +434,13 @@ const Home = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showPassword ? 'Hide' : 'Show'}
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               
               <Button 
                 type="submit"
+                disabled={authLoading}
                 className="w-full py-3 rounded-2xl font-semibold shadow-neumorphic hover:shadow-neumorphic-large transition-all duration-200"
                 style={{ 
                   backgroundColor: '#a2d5f2',
@@ -381,7 +448,7 @@ const Home = () => {
                   color: 'white'
                 }}
               >
-                {isLogin ? 'Sign In' : 'Start Free Trial'}
+                {authLoading ? 'Loading...' : (isLogin ? 'Sign In' : 'Start Free Trial')}
               </Button>
             </form>
 

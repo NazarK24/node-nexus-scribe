@@ -265,9 +265,9 @@ const Dashboard = () => {
       </div>
 
       <CreateWorkspaceModal
-        isOpen={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-        onCreateWorkspace={handleCreateWorkspace}
+        open={showCreateModal}
+        onOpenChange={setShowCreateModal}
+        onWorkspaceCreated={handleCreateWorkspace}
       />
     </div>
   );

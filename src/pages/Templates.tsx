@@ -3,11 +3,30 @@ import { Search, Filter, Star, Users, Download, Eye, Kanban, BookOpen, Map, File
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CreateWorkspaceModal } from '@/components/CreateWorkspaceModal';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Templates = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('popular');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const handleUseTemplate = () => {
+    if (!user) {
+      navigate('/');
+      return;
+    }
+    setShowCreateModal(true);
+  };
+
+  const handleWorkspaceCreated = (workspace: any) => {
+    navigate('/app');
+  };
 
   const templates = [
     {
@@ -192,7 +211,7 @@ const Templates = () => {
                       ))}
                     </div>
                     <div className="flex gap-2">
-                      <Button className="rounded-xl shadow-neumorphic hover:shadow-neumorphic-large">
+                      <Button onClick={handleUseTemplate} className="rounded-xl shadow-neumorphic hover:shadow-neumorphic-large">
                         Use Template
                       </Button>
                       <Button variant="outline" className="rounded-xl">
@@ -271,7 +290,7 @@ const Templates = () => {
               </div>
               
               <div className="flex gap-2">
-                <Button size="sm" className="flex-1 rounded-xl shadow-neumorphic hover:shadow-neumorphic-large">
+                <Button onClick={handleUseTemplate} size="sm" className="flex-1 rounded-xl shadow-neumorphic hover:shadow-neumorphic-large">
                   Use Template
                 </Button>
                 <Button variant="outline" size="sm" className="rounded-xl">
@@ -292,6 +311,12 @@ const Templates = () => {
           </div>
         )}
       </div>
+      
+      <CreateWorkspaceModal
+        open={showCreateModal}
+        onOpenChange={setShowCreateModal}
+        onWorkspaceCreated={handleWorkspaceCreated}
+      />
     </div>
   );
 };

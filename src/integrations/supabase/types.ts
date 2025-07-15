@@ -14,7 +14,231 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      documents: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          created_by: string
+          id: string
+          title: string
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          created_by: string
+          id?: string
+          title: string
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          title?: string
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          id: string
+          subscription_type:
+            | Database["public"]["Enums"]["subscription_type"]
+            | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          subscription_type?:
+            | Database["public"]["Enums"]["subscription_type"]
+            | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          subscription_type?:
+            | Database["public"]["Enums"]["subscription_type"]
+            | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      workspace_members: {
+        Row: {
+          id: string
+          joined_at: string | null
+          role: string | null
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_members_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspace_templates: {
+        Row: {
+          category: string | null
+          color: string | null
+          content: Json | null
+          created_at: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          preview_image: string | null
+          tags: string[] | null
+        }
+        Insert: {
+          category?: string | null
+          color?: string | null
+          content?: Json | null
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          preview_image?: string | null
+          tags?: string[] | null
+        }
+        Update: {
+          category?: string | null
+          color?: string | null
+          content?: Json | null
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          preview_image?: string | null
+          tags?: string[] | null
+        }
+        Relationships: []
+      }
+      workspaces: {
+        Row: {
+          auto_centering: boolean | null
+          created_at: string | null
+          description: string | null
+          grid_visible: boolean | null
+          id: string
+          name: string
+          node_density: number | null
+          node_spacing: number | null
+          owner_id: string
+          template_id: string | null
+          theme_color: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_centering?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          grid_visible?: boolean | null
+          id?: string
+          name: string
+          node_density?: number | null
+          node_spacing?: number | null
+          owner_id: string
+          template_id?: string | null
+          theme_color?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_centering?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          grid_visible?: boolean | null
+          id?: string
+          name?: string
+          node_density?: number | null
+          node_spacing?: number | null
+          owner_id?: string
+          template_id?: string | null
+          theme_color?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspaces_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "workspace_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +247,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      subscription_type: "free" | "pro" | "team"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +374,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      subscription_type: ["free", "pro", "team"],
+    },
   },
 } as const
