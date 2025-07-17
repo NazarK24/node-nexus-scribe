@@ -23,11 +23,61 @@ const Home = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
 
-  React.useEffect(() => {
-    if (user) {
-      navigate('/dashboard');
-    }
-  }, [user, navigate]);
+  // If user is authenticated, show navigation buttons instead of redirecting
+  if (user && !loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        {/* Navigation Header */}
+        <nav className="px-6 py-4 flex justify-between items-center">
+          <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            KnowledgeGraph
+          </div>
+          <div className="flex items-center gap-4">
+            <Button onClick={() => navigate('/dashboard')} variant="outline" className="rounded-xl">
+              Dashboard
+            </Button>
+            <Button onClick={() => navigate('/new-workspace')} variant="outline" className="rounded-xl">
+              New Workspace
+            </Button>
+            <Button onClick={() => navigate('/settings')} variant="outline" className="rounded-xl">
+              Settings
+            </Button>
+          </div>
+        </nav>
+
+        {/* Welcome Section for Authenticated Users */}
+        <section className="py-20 px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-5xl font-bold mb-6">
+              Welcome back!
+            </h1>
+            <p className="text-xl text-gray-600 mb-12">
+              Ready to continue working on your knowledge graphs?
+            </p>
+            
+            <div className="flex justify-center gap-6">
+              <Button 
+                size="lg" 
+                onClick={() => navigate('/dashboard')}
+                className="px-8 py-4 rounded-3xl shadow-neumorphic-large hover:shadow-neumorphic transition-all duration-300"
+              >
+                View My Workspaces
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={() => navigate('/new-workspace')}
+                className="px-8 py-4 rounded-3xl shadow-neumorphic hover:shadow-neumorphic-large transition-all duration-300"
+              >
+                Create New Workspace
+              </Button>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   const pricingPlans = [
     {
