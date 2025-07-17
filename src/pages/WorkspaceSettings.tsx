@@ -288,9 +288,9 @@ const WorkspaceSettings = () => {
                       </div>
                     </div>
                   ))}
-                </div>
-              </div>
-            </div>
+        </div>
+      </div>
+    </div>
           </TabsContent>
 
           {/* Advanced Tab */}
